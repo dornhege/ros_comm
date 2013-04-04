@@ -1,0 +1,34 @@
+
+function _roscomplete_launch {
+    arg="${COMP_WORDS[COMP_CWORD]}"
+    COMPREPLY=()
+    if [[ ${arg} =~ \-\-.* ]]; then
+        COMPREPLY=(${COMPREPLY[@]} $(compgen -W "--files --args --nodes --find-node --child --local --screen --server_uri --run_id --wait --port --core --pid --dump-params" -- ${arg}))
+    else
+        _roscomplete_search_dir "( -type f -regex .*\.launch$ -o -type f -regex .*\.test$ )"
+        if [[ $COMP_CWORD == 1 ]]; then
+           COMPREPLY=($(compgen -o plusdirs -f -X "!*.launch" -- ${arg}) ${COMPREPLY[@]} $(compgen -o plusdirs -f -X "!*.test" -- ${arg}) ${COMPREPLY[@]})
+        fi
+        # Try to complete roslaunch arguments for a 
+        # launch file
+        if [[ ${#COMP_WORDS[@]} -ge 2 ]]; then
+            _roslaunch_args=$(roslaunch-complete ${COMP_WORDS[@]})
+            # We want to allow any file name that the user
+            # supplies, i.e. not only .launch/.test
+            # Therefore roslaunch-complete has to decide
+            # for us if that is completable.
+            # roslaunch-complete should be very silent about
+            # errors and return 0 if it produced usable completion.
+            if [[ $? == 0 ]]; then
+                COMPREPLY=($(compgen -W "${_roslaunch_args}" -- "${arg}") ${COMPREPLY[@]})
+                # FIXME maybe leave ${COMPREPLY[@]} if we 
+                # completed successfully.
+
+                echo ${_roslaunch_args}
+            fi
+        fi
+    fi
+}
+
+
+
