@@ -63,6 +63,7 @@ import roslib.message
 import rosgraph
 #TODO: lazy-import rospy or move rospy-dependent routines to separate location
 import rospy
+import std_msgs
 
 try:
     long
@@ -236,7 +237,7 @@ class ROSTopicHz(object):
 
         return rate, min_delta, max_delta, std_dev, n+1
 
-    def print_hz(self, topics=(None,)):
+    def print_hz(self, topics=(None,), publish_hz_topics=(None,)):
         """
         print the average publishing rate to screen
         """
@@ -247,12 +248,17 @@ class ROSTopicHz(object):
                 return
             rate, min_delta, max_delta, std_dev, window = ret
             print("average rate: %.3f\n\tmin: %.3fs max: %.3fs std dev: %.5fs window: %s"%(rate, min_delta, max_delta, std_dev, window))
+            if publish_hz_topics:
+                pub = rospy.Publisher(publish_hz_topics[0], std_msgs.msg.Float64, queue_size=10)
+                pub.publish(rate)
             return
 
         # monitoring multiple topics' hz
         header = ['topic', 'rate', 'min_delta', 'max_delta', 'std_dev', 'window']
         stats = {h: [] for h in header}
+        i=0
         for topic in topics:
+            i += 1
             hz_stat = self.get_hz(topic)
             if hz_stat is None:
                 continue
@@ -264,10 +270,16 @@ class ROSTopicHz(object):
             stats['max_delta'].append('{:.4}'.format(max_delta))
             stats['std_dev'].append('{:.4}'.format(std_dev))
             stats['window'].append(str(window))
+
+            if publish_hz_topics:
+                pub = rospy.Publisher(publish_hz_topics[i-1], std_msgs.msg.Float64, queue_size=10)
+                pub.publish(rate)
+
         if not stats['topic']:
             print('no new messages')
             return
         print(_get_ascii_table(header, stats))
+
 
 def _get_ascii_table(header, cols):
     # compose table with left alignment
@@ -290,7 +302,7 @@ def _get_ascii_table(header, cols):
 def _sleep(duration):
     rospy.rostime.wallsleep(duration)
 
-def _rostopic_hz(topics, window_size=-1, filter_expr=None, use_wtime=False, tcp_nodelay=False):
+def _rostopic_hz(topics, window_size=-1, filter_expr=None, use_wtime=False, tcp_nodelay=False, publish_hz_topics=None):
     """
     Periodically print the publishing rate of a topic to console until
     shutdown
@@ -298,6 +310,7 @@ def _rostopic_hz(topics, window_size=-1, filter_expr=None, use_wtime=False, tcp_
     :param window_size: number of messages to average over, -1 for infinite, ``int``
     :param filter_expr: Python filter expression that is called with m, the message instance
     :param tcp_nodelay: Subscribe with the TCP_NODELAY transport hint if true
+    :param publish_hz_topics:  Publish rate on the topics
     """
     _check_master()
     if rospy.is_shutdown():
@@ -320,7 +333,7 @@ def _rostopic_hz(topics, window_size=-1, filter_expr=None, use_wtime=False, tcp_
 
     while not rospy.is_shutdown():
         _sleep(1.0)
-        rt.print_hz(topics)
+        rt.print_hz(topics, publish_hz_topics)
 
 class ROSTopicDelay(object):
 
@@ -1500,6 +1513,9 @@ def _rostopic_cmd_hz(argv):
     parser.add_option("--tcpnodelay",
                       dest="tcp_nodelay", action="store_true",
                       help="use the TCP_NODELAY transport hint when subscribing to topics")
+    parser.add_option("--publish-hz",
+                      dest="publish_hz", default=None,
+                      help="publishes the rate on the given topics to be used by other program (e.g. for plotting)")
 
     (options, args) = parser.parse_args(args)
     if len(args) == 0:
@@ -1520,8 +1536,15 @@ def _rostopic_cmd_hz(argv):
         filter_expr = expr_eval(options.filter_expr)
     else:
         filter_expr = None
+
+    if options.publish_hz:
+        publish_hz_topics=options.publish_hz.split(',')
+        if len(topics) != len(publish_hz_topics):
+            parser.error("Number of topics must be the same as number of --publish-hz topics")
+    else:
+        publish_hz_topics=None
     _rostopic_hz(topics, window_size=window_size, filter_expr=filter_expr,
-                 use_wtime=options.use_wtime, tcp_nodelay=options.tcp_nodelay)
+                 use_wtime=options.use_wtime, tcp_nodelay=options.tcp_nodelay, publish_hz_topics=publish_hz_topics)
 
 
 def _rostopic_cmd_delay(argv):
