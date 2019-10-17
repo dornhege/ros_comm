@@ -1037,10 +1037,18 @@ def _rostopic_echo(topic, callback_echo, bag_file=None, echo_all_topics=False):
     else:
         _check_master()
         rospy.init_node(NAME, anonymous=True)
-        msg_class, real_topic, msg_eval = get_topic_class(topic, blocking=True)
-        if msg_class is None:
-            # occurs on ctrl-C
-            return
+
+        if callback_echo.max_count is None:
+            msg_class, real_topic, msg_eval = get_topic_class(topic, blocking=True)
+            if msg_class is None:
+                # occurs on ctrl-C
+                return
+        else:
+            msg_class, real_topic, msg_eval = get_topic_class(topic, blocking=False)
+            if msg_class is None:
+                sys.stderr.write("WARNING: topic [%s] does not appear to be published yet\n"%topic)
+                return
+            
         callback_echo.msg_eval = msg_eval
 
         # extract type information for submessages
