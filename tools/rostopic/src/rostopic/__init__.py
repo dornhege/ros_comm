@@ -317,21 +317,29 @@ def _rostopic_hz(topics, window_size=-1, filter_expr=None, use_wtime=False, tcp_
         return
     rospy.init_node(NAME, anonymous=True)
     rt = ROSTopicHz(window_size, filter_expr=filter_expr, use_wtime=use_wtime)
-    for topic in topics:
-        msg_class, real_topic, _ = get_topic_class(topic, blocking=True) # pause hz until topic is published
-        # we use a large buffer size as we don't know what sort of messages we're dealing with.
-        # may parameterize this in the future
-        if filter_expr is not None:
-            # have to subscribe with topic_type
-            rospy.Subscriber(real_topic, msg_class, rt.callback_hz, callback_args=topic, tcp_nodelay=tcp_nodelay)
-        else:
-            rospy.Subscriber(real_topic, rospy.AnyMsg, rt.callback_hz, callback_args=topic, tcp_nodelay=tcp_nodelay)
-        print("subscribed to [%s]" % real_topic)
+    topics_to_be_subscribed = topics
 
     if rospy.get_param('use_sim_time', False):
         print("WARNING: may be using simulated time",file=sys.stderr)
 
     while not rospy.is_shutdown():
+        topics_failed_to_subscribe = []
+        for topic in topics_to_be_subscribed:
+            msg_class, real_topic, _ = get_topic_class(topic, blocking=False) # do NOT pause hz until topic is published
+            if(msg_class == None or real_topic==None):
+                sys.stderr.write("WARNING: topic [%s] does not appear to be published yet\n"%topic)
+                topics_failed_to_subscribe.append(topic)
+                continue
+            # we use a large buffer size as we don't know what sort of messages we're dealing with.
+            # may parameterize this in the future
+            if filter_expr is not None:
+                # have to subscribe with topic_type
+                rospy.Subscriber(real_topic, msg_class, rt.callback_hz, callback_args=topic, tcp_nodelay=tcp_nodelay)
+            else:
+                rospy.Subscriber(real_topic, rospy.AnyMsg, rt.callback_hz, callback_args=topic, tcp_nodelay=tcp_nodelay)
+            print("subscribed to [%s]" % real_topic)
+            
+        topics_to_be_subscribed = topics_failed_to_subscribe
         _sleep(1.0)
         rt.print_hz(topics, publish_hz_topics)
 
