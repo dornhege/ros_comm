@@ -1,5 +1,8 @@
 cmake_minimum_required(VERSION 2.8.3)
 project(rostest)
+if(NOT CMAKE_CONFIGURATION_TYPES AND NOT CMAKE_BUILD_TYPE)
+  set(CMAKE_BUILD_TYPE Release)
+endif()
 
 find_package(catkin COMPONENTS rosunit)
 find_package(Boost COMPONENTS system thread)
