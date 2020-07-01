@@ -2,6 +2,19 @@
 Changelog for package rosout
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+1.14.6 (2020-05-29)
+-------------------
+
+1.14.5 (2020-03-19)
+-------------------
+
+1.14.4 (2020-02-20)
+-------------------
+* bump CMake minimum version to avoid CMP0048 warning (`#1869 <https://github.com/ros/ros_comm/issues/1869>`_)
+* fix use-after-free issue in rosout (`#1764 <https://github.com/ros/ros_comm/issues/1764>`_)
+* include cctype for std::tolower (`#1587 <https://github.com/ros/ros_comm/issues/1587>`_)
+* disable rosout.log by using environment variable (`#1425 <https://github.com/ros/ros_comm/issues/1425>`_)
+
 1.14.3 (2018-08-06)
 -------------------
 

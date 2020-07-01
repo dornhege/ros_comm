@@ -2,6 +2,21 @@
 Changelog for package roslz4
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+1.14.6 (2020-05-29)
+-------------------
+* use undefined dynamic_lookup on macOS (`#1923 <https://github.com/ros/ros_comm/issues/1923>`_)
+
+1.14.5 (2020-03-19)
+-------------------
+
+1.14.4 (2020-02-20)
+-------------------
+* bump CMake minimum version to avoid CMP0048 warning (`#1869 <https://github.com/ros/ros_comm/issues/1869>`_)
+* add alternative lz4 name for Windows (`#1821 <https://github.com/ros/ros_comm/issues/1821>`_)
+* check for XXH_malloc NULL return (`#1778 <https://github.com/ros/ros_comm/issues/1778>`_)
+* update install destination for roslz4 (`#1620 <https://github.com/ros/ros_comm/issues/1620>`_)
+* fix issues when built or run on Windows (`#1466 <https://github.com/ros/ros_comm/issues/1466>`_)
+
 1.14.3 (2018-08-06)
 -------------------
 

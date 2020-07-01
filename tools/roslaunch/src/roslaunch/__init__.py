@@ -140,6 +140,9 @@ def _get_optparse():
     parser.add_option("--screen",
                       dest="force_screen", default=False, action="store_true",
                       help="Force output of all local nodes to screen")
+    parser.add_option("--required",
+                      dest="force_required", default=False, action="store_true",
+                      help="Force all nodes to be required")
     parser.add_option("--log",
                       dest="force_log", default=False, action="store_true",
                       help="Force output of all local nodes to log")
@@ -165,6 +168,9 @@ def _get_optparse():
     parser.add_option("-v", action="store_true",
                       dest="verbose", default=False,
                       help="verbose printing")
+    parser.add_option("--no-summary", action="store_true",
+                      dest="no_summary", default=False,
+                      help="hide summary printing")
     # 2685 - Dump parameters of launch files
     parser.add_option("--dump-params", default=False, action="store_true",
                       dest="dump_params",
@@ -212,8 +218,10 @@ def _validate_args(parser, options, args):
 
     elif len(args) == 0:
         parser.error("you must specify at least one input file")
-    elif [f for f in args if not (f == '-' or os.path.exists(f))]:
-        parser.error("The following input files do not exist: %s"%f)
+    else:
+        missing_files = [f for f in args if not (f == '-' or os.path.exists(f))]
+        if missing_files:
+            parser.error("The following input files do not exist: %s"%', '.join(missing_files))
 
     if args.count('-') > 1:
         parser.error("Only a single instance of the dash ('-') may be specified.")
@@ -318,7 +326,9 @@ def main(argv=sys.argv):
                     verbose=options.verbose, force_screen=options.force_screen,
                     force_log=options.force_log,
                     num_workers=options.num_workers, timeout=options.timeout,
-                    master_logger_level=options.master_logger_level)
+                    master_logger_level=options.master_logger_level,
+                    show_summary=not options.no_summary,
+                    force_required=options.force_required)
             p.start()
             p.spin()
 
