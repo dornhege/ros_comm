@@ -2,6 +2,24 @@
 Changelog for package xmlrpcpp
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+1.14.10 (2020-10-16)
+--------------------
+* Update maintainers (`#2075 <https://github.com/ros/ros_comm/issues/2075>`_)
+* Trap for overly large input to XmlRPCPP (`#2065 <https://github.com/ros/ros_comm/issues/2065>`_)
+* Fix spelling (`#2066 <https://github.com/ros/ros_comm/issues/2066>`_)
+* XmlRpcValue::_doubleFormat should be used during write (`#2003 <https://github.com/ros/ros_comm/issues/2003>`_)
+* Contributors: Jacob Perron, Shane Loretz, Sid Faber, tomoya
+
+1.14.9 (2020-08-20)
+-------------------
+
+1.14.8 (2020-08-12)
+-------------------
+
+1.14.7 (2020-07-31)
+-------------------
+* add const versions of XmlRpcValue converting operators (`#1978 <https://github.com/ros/ros_comm/issues/1978>`_)
+
 1.14.6 (2020-05-29)
 -------------------
 * check if enough FDs are free, instead counting the total free FDs (`#1929 <https://github.com/ros/ros_comm/issues/1929>`_)

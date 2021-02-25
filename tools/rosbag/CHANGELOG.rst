@@ -2,6 +2,22 @@
 Changelog for package rosbag
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+1.14.10 (2020-10-16)
+--------------------
+* Update maintainers (`#2075 <https://github.com/ros/ros_comm/issues/2075>`_)
+* Fix spelling (`#2066 <https://github.com/ros/ros_comm/issues/2066>`_)
+* Gracefully stop recording upon SIGTERM and SIGINT (`#2038 <https://github.com/ros/ros_comm/issues/2038>`_)
+* Contributors: Devin Bonnie, Jacob Perron, Shane Loretz, tomoya
+
+1.14.9 (2020-08-20)
+-------------------
+
+1.14.8 (2020-08-12)
+-------------------
+
+1.14.7 (2020-07-31)
+-------------------
+
 1.14.6 (2020-05-29)
 -------------------
 * fix bag migration failures caused by typo in connection_header assignment (`#1952 <https://github.com/ros/ros_comm/issues/1952>`_)

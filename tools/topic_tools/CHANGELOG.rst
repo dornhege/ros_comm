@@ -2,6 +2,21 @@
 Changelog for package topic_tools
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+1.14.10 (2020-10-16)
+--------------------
+* Update maintainers (`#2075 <https://github.com/ros/ros_comm/issues/2075>`_)
+* Contributors: Jacob Perron, Shane Loretz
+
+1.14.9 (2020-08-20)
+-------------------
+
+1.14.8 (2020-08-12)
+-------------------
+
+1.14.7 (2020-07-31)
+-------------------
+* add latch param to throttle (`#1944 <https://github.com/ros/ros_comm/issues/1944>`_)
+
 1.14.6 (2020-05-29)
 -------------------
 * avoid infinite recursion in rosrun tab completion when rosbash is not installed (`#1948 <https://github.com/ros/ros_comm/issues/1948>`_)

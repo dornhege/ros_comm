@@ -2,6 +2,29 @@
 Changelog for package roscpp
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+1.14.10 (2020-10-16)
+--------------------
+* Set call_finished\_ with true for each call inside callFinished (`#2074 <https://github.com/ros/ros_comm/issues/2074>`_)
+* Update maintainers (`#2075 <https://github.com/ros/ros_comm/issues/2075>`_)
+* Cached parameter should be unsubscribed (`#2068 <https://github.com/ros/ros_comm/issues/2068>`_)
+* Fix spelling (`#2066 <https://github.com/ros/ros_comm/issues/2066>`_)
+* Fix Lost Wake Bug in ROSOutAppender (`#2033 <https://github.com/ros/ros_comm/issues/2033>`_)
+* Contributors: Adel Fakih, Chen Lihui, Jacob Perron, Shane Loretz, tomoya
+
+1.14.9 (2020-08-20)
+-------------------
+* use fully qualified ceil() in condition_variable.h (`#2025 <https://github.com/ros/ros_comm/issues/2025>`_)
+
+1.14.8 (2020-08-12)
+-------------------
+* remove 'using namespace' from condition_variable.h (`#2020 <https://github.com/ros/ros_comm/issues/2020>`_)
+* support boost 1.66 (`#2016 <https://github.com/ros/ros_comm/issues/2016>`_)
+
+1.14.7 (2020-07-31)
+-------------------
+* fix subscription busy wait melodic (`#1684 <https://github.com/ros/ros_comm/issues/1684>`_, `#2014 <https://github.com/ros/ros_comm/issues/2014>`_)
+* use an internal implementation of boost::condition_variable with monotonic clock (`#1932 <https://github.com/ros/ros_comm/issues/1932>`_)
+
 1.14.6 (2020-05-29)
 -------------------
 * fix a bug that using a destroyed connection object (`#1950 <https://github.com/ros/ros_comm/issues/1950>`_)
